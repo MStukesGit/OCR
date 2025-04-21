@@ -33,33 +33,50 @@
         <br/>
         <h3>Process Breakdown</h3>
         <p> 
-            Curabitur feugiat justo quis ante vulputate ultricies non id odio. Curabitur eu 
-            velit porta, blandit ex quis, tempor magna. Integer eget augue vel risus condimentum suscipit. 
-            Aliquam dignissim accumsan mollis. Etiam id erat vitae ligula semper convallis. Donec vehicula, 
-            erat sit amet tempus pulvinar, lacus massa tempus velit, eget ornare libero nulla et turpis. 
-            Integer sit amet orci neque. Nunc malesuada eleifend ligula id porttitor. Nullam eleifend volutpat
-            ante, a elementum eros molestie eget. Curabitur hendrerit lobortis magna ut aliquet. 
-            Proin pretium eros orci, et laoreet purus scelerisque ut. Quisque mattis diam ac ipsum fringilla, 
-            vel tempor risus tempus. Donec posuere fermentum lacus ultricies imperdiet.
+            Our process relied on using standard image preproccessing to prepare a chosen text 
+            then passing it through the pytesseract ocr sysytem to obtain a basic first pass of the text. 
+            We then passed text as well as the data from the ocr scan through a function that checked the 
+            confidence score of each word as well whether that word contained a known polyglyph in our system.
+            If a word came back with both a confidence score below a targeted threshold and came back containing
+            a known polyglyph then word would be ran through a function to compare the probability of each of the 
+            characters in that polyglyph set to see which was most likely based on data found in our bigram and trigram
+            data sets. 
         </p>
             <br/>
             <h4>Preproccessing</h4>
             <p>
-                Nam mollis consectetur orci, in commodo est auctor in. Aliquam tempor eleifend 
-                nibh id vulputate. Nullam blandit, odio at faucibus rhoncus, diam eros ultricies nisi, 
-                eget fringilla metus lacus eget mi. Nam sollicitudin tortor quis odio pulvinar ultricies. 
-                Donec a euismod elit, ut tincidunt nisi. Class aptent taciti sociosqu ad litora torquent per 
-                conubia nostra, per inceptos himenaeos. Nulla feugiat orci eros, at rhoncus mi viverra et.
+                <i><b>1. Grey Scaling</b></i><br/>
+                The initial step for properly scanning in the text. Colors are muted to render
+                 the image in grey scale in preperation for the conversion to black and white.<br/>
+                <i><b>2. Black & White Conversion</b></i><br/>
+                A nececary step as the OCR system is trained to best recognize characters in black on a white 
+                background. Our system defines a threshold and any colors below that shade are pushed to white
+                while those above are pushed to pure black optimizining the scanning proccess. <br/>
+                <i><b>3. Noise Removal</b></i><br/>
+                While not strictly nececary the removal of noise and blur helps to reduce issues caused
+                by small particles or inconsistencies present on the scanned text.
+                <i><b>(Optional) Text Allignment</b></i><br/>
+                This is not required for every text as many are already vertically oriented however since OCR systems are designed to
+                recognize text in a verticle orientation this can be a neccesity.It helps to adjest text that is slanted at extreme 
+                angles or slightly warped attempting to place them in a more proper format. When nececary for a text this 
+                step is applied first before running the text through the other preproccessing steps.<br/>
             </p>
-            <hr>
             <br/>
             <h4>Context based letter baising</h4>
             <p>
-                Aenean sapien est, sollicitudin ac risus eu, dignissim commodo sem. Donec convallis 
-                commodo turpis id molestie. Sed dapibus nunc id tellus varius accumsan. Fusce diam enim, 
-                tincidunt a finibus vitae, ornare quis nisl. Sed facilisis maximus efficitur. Quisque sed 
-                faucibus leo, at ornare massa. In auctor hendrerit suscipit. Morbi tempor id felis vel sodales. 
-                Integer at bibendum mi, pellentesque dignissim felis.
+                This is the core of our project. It focuses on correcting OCR based on letter combination frequency
+                in a similar way to how humans actually read and proccess ambiguos text. This is done by
+                taking the ambiguos letter and the letters around it in a word. We take the polyglyph character and
+                combine it in three diffrent combinations. First the character and the 2 prior to it, 
+                then the character and the 2 after it, and finally the character as well as one before and one after it.
+                Taking these three sets allows us to further optimize are statistical data to get the correct character.
+                Our system will only take 3 letter combinations if the text does not contain white space in the chosen space.
+                In the event that only 2 letters are taken then we will simply take a two letter block, however 
+                if only one letter is gather such as if the ambiguos letter is at the begining or end of a word then
+                that set is ignored for that execution of the function. After that the letter combination are each have the ambiguos
+                letter changed to use its other homoglyphs. Then each of these alternatives is compared to the statistical commonality
+                of that letter combination within our datasets.(<a href="https://blogs.sas.com/content/iml/2014/09/26/bigrams.html">
+                Bigram dataset</a> and <a href="https://calmcode.io/datasets/english_3grams">Trigram dataset</a>)
             </p>
         <hr>
        <h2> Full Example: "Monday's Child"</h2>     
