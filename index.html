@@ -77,6 +77,9 @@
                 letter changed to use its other homoglyphs. Then each of these alternatives is compared to the statistical commonality
                 of that letter combination within our datasets.(<a href="https://blogs.sas.com/content/iml/2014/09/26/bigrams.html">
                 Bigram dataset</a> and <a href="https://calmcode.io/datasets/english_3grams">Trigram dataset</a>)
+                <br/>
+                <img src="pics/chart.png " width ="300" height="400">
+                <br/>
             </p>
         <hr>
        <h2> Full Example: "Monday's Child"</h2>     
@@ -103,6 +106,21 @@
         <h3>Allignment</h3>
         <p>Not Required for this text</p>
         <h3> Initial Results</h3>
+        <br/> <img src="pics/Initial.png" width ="300" height="400"> <br/>
+        <h3> Applying Function</h3>
+        <br/> <b>Confidence Scores</b><br/>
+        <img src="pics/Conf.png" width ="300" height="400"><br/>
+        <p> Some values are noteable such as "Tyesdays" with a confidence score of only
+            13 as well as flagging for the possible y, u, v homoglyph set. leading to it
+            bieng passed through the system. After proccessing it we get this as a final result.
+        </p>
+        <b>Final Results</b>
+        <img src="pics/final.png" width ="300" height="400"> <br/>
+        <p> This fixes many of the apparent issues with the initial scan though some issues can't be
+            fixed with our current system specifically the none alphebetical miss reads such as 15 instead of Is.
+            Overall while some errors are still present this system works well to improve many comman OCR errors.
+        </p>
+        
     </body>
 
 </html>
